@@ -133,7 +133,7 @@ python train.py --data-root=./data/jsut --hparams="frontend=jp" --hparams="build
 Note that there are many hyper parameters and design choices. Some are configurable by `hparams.py` and some are hardcoded in the source (e.g., dilation factor for each convolution layer). If you find better hyper parameters, please let me know!
 
 
-### 4. Monitor with Tensorboard
+### 3. Monitor with Tensorboard
 
 Logs are dumped in `./log` directory by default. You can monitor logs by tensorboard:
 
@@ -141,7 +141,7 @@ Logs are dumped in `./log` directory by default. You can monitor logs by tensorb
 tensorboard --logdir=log
 ```
 
-### 5. Synthesize from a checkpoint
+### 4. Synthesize from a checkpoint
 
 Given a list of text, `synthesis.py` synthesize audio signals from trained model. Usage is:
 
