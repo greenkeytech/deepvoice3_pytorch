@@ -1,5 +1,4 @@
 # coding: utf-8
-
 """Text processing frontend
 
 All frontend module should have the following functions:
@@ -16,6 +15,6 @@ from deepvoice3_pytorch.frontend import en
 
 # optinoal Japanese frontend
 try:
-    from deepvoice3_pytorch.frontend import jp
+  from deepvoice3_pytorch.frontend import jp
 except ImportError:
-    jp = None
+  jp = None

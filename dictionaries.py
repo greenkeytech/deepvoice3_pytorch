@@ -11,6 +11,15 @@ valid_symbols = [
 _valid_symbol_set = set(valid_symbols)
 
 
+# Universal helper functions
+def _get_pronunciation(s):
+  parts = s.strip().split(' ')
+  for part in parts:
+    if part not in _valid_symbol_set:
+      return None
+  return ' '.join(parts)
+
+
 class CMUDict:
   '''Thin wrapper around CMUDict data. http://www.speech.cs.cmu.edu/cgi-bin/cmudict'''
 
@@ -50,9 +59,40 @@ def _parse_cmudict(file):
   return cmudict
 
 
-def _get_pronunciation(s):
-  parts = s.strip().split(' ')
-  for part in parts:
-    if part not in _valid_symbol_set:
-      return None
-  return ' '.join(parts)
+class GKTDict:
+  '''Thin wrapper around green key tech dictionary'''
+
+  def __init__(self, file_or_path, keep_ambiguous=True):
+    if isinstance(file_or_path, str):
+      with open(file_or_path, encoding='latin-1') as f:
+        entries = _parse_gktdict(f)
+    else:
+      entries = _parse_gktdict(file_or_path)
+    if not keep_ambiguous:
+      entries = {word: pron for word, pron in entries.items() if len(pron) == 1}
+    self._entries = entries
+
+  def __len__(self):
+    return len(self._entries)
+
+  def lookup(self, word):
+    '''Returns list of ARPAbet pronunciations of the given word.'''
+    return self._entries.get(word.lower())
+
+
+_alt_re = re.compile(r'\([0-9]+\)')
+
+
+def _parse_gktdict(file):
+  gktdict = {}
+  for line in file:
+    if len(line) and (line[0] >= 'a' and line[0] <= 'z' or line[0] == "'"):
+      parts = line.split(' ')
+      word = re.sub(_alt_re, '', parts[0])
+      pronunciation = _get_pronunciation(" ".join(parts[1:]))
+      if pronunciation:
+        if word in gktdict:
+          gktdict[word].append(pronunciation)
+        else:
+          gktdict[word] = [pronunciation]
+  return gktdict
