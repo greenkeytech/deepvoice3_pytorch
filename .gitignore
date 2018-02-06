@@ -1,3 +1,8 @@
+legacy
+notebooks
+foobar*
+run.sh
+README.rst
 pretrained_models
 deepvoice3_pytorch/version.py
 checkpoints*
@@ -194,3 +199,7 @@ Temporary Items
 
 # Linux trash folder which might appear on any partition or disk
 .Trash-*
+
+LJSpeech*
+VCTK*
+*.tar.gz

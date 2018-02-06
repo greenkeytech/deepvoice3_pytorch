@@ -1,0 +1,32 @@
+
+nvidia-docker run -v $(pwd):/working -it gcr.io/tensorflow/tensorflow:1.4.1-gpu-py3 bash
+
+apt update && apt install -y python3-pip git vim python3-tk
+pip3 install -U pip
+pip3 install http://download.pytorch.org/whl/cu80/torch-0.3.0.post4-cp35-cp35m-linux_x86_64.whl 
+pip3 install -e ".[train]"
+pip3 install -U torchvision docopt tqdm matplotlib setuptools
+python3 -c "import nltk; nltk.download(\"cmudict\")"
+python3 -c "import nltk; nltk.download(\"punkt\")"
+
+# to use pre-trained models
+git checkout 0421749af908905d181f089f06956fddd0982d47
+download from 
+
+
+for i in {0..107}; do 
+mkdir -p samples/speaker_$i
+python synthesis.py --hparams="builder=deepvoice3_multispeaker,preset=deepvoice3_vctk" 20171222_deepvoice3_vctk108_checkpoint_step000300000.pth text_list.txt samples/speaker_$i --replace_pronunciation_prob=0.75 --speaker_id=$i
+done
+
+
+# to train your own
+wget http://homepages.inf.ed.ac.uk/jyamagis/release/VCTK-Corpus.tar.gz
+tar -xvzf VCTK-Corpus.tar.gz
+
+mkdir -p ~/data
+
+python3 preprocess.py --num_workers=12 ljspeech LJSpeech-1.0/ ./data/ljspeech
+
+python3 train.py --data-root=./data/ljspeech/ --hparams="builder=deepvoice3,preset=deepvoice3_ljspeech"
+
