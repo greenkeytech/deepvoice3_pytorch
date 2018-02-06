@@ -1,3 +1,9 @@
+speaker_*
+samples
+train
+fail
+*.png
+*.txt
 legacy
 notebooks
 foobar*

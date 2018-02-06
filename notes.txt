@@ -1,4 +1,4 @@
-
+# to run inside a docker container, do the following:
 nvidia-docker run -v $(pwd):/working -it gcr.io/tensorflow/tensorflow:1.4.1-gpu-py3 bash
 
 apt update && apt install -y python3-pip git vim python3-tk
