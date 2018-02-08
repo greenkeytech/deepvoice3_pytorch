@@ -1,6 +1,7 @@
 speaker_*
 *.pth
 samples
+dictionaries
 train
 fail
 *.png
